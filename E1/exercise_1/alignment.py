@@ -10,20 +10,13 @@ def procrustes_align(pc_x, pc_y):
     :param pc_y: Nx3 target point cloud, corresponding to pc_x locations
     :return: rotation (3, 3) and translation (3,) needed to go from pc_x to pc_y
     """
-    R = np.zeros((3, 3), dtype=np.float32)
-    t = np.zeros((3,), dtype=np.float32)
-
-    # TODO: Your implementation starts here ###############
-    # 1. get centered pc_x and centered pc_y
-    # 2. create X and Y both of shape 3XN by reshaping centered pc_x, centered pc_y
-    # 3. estimate rotation
-    # 4. estimate translation
-    # R and t should now contain the rotation (shape 3x3) and translation (shape 3,)
-    # TODO: Your implementation ends here ###############
-
+    X = pc_x - pc_x.mean(0)
+    Y = pc_y - pc_y.mean(0)
+    U, S, VT = np.linalg.svd(np.dot(X.T, Y))
+    R = np.dot(VT.T, U.T)
+    t = pc_y.mean(axis=0) - R.dot(pc_x.mean(axis=0))
     t_broadcast = np.broadcast_to(t[:, np.newaxis], (3, pc_x.shape[0]))
     print('Procrustes Aligment Loss: ', np.abs((np.matmul(R, pc_x.T) + t_broadcast) - pc_y.T).mean())
-
     return R, t
 
 

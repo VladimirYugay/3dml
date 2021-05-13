@@ -147,11 +147,7 @@ def compute_cube_index(cube: np.array, isolevel=0.) -> int:
     :param isolevel: The surface isolevel. In our case, this is always 0.
     :return: The cube index as integer value
     """
-
-    # ###############
-    # TODO: Implement
-    return -1
-    # ###############
+    return int(np.packbits(np.where(cube < 0, 0, 1)))
 
 
 def marching_cubes(sdf: np.array) -> tuple:
@@ -166,12 +162,38 @@ def marching_cubes(sdf: np.array) -> tuple:
 
     global_vertices = []
     global_triangles = []
-
-    # ###############
-    # TODO: Implement
-    # ###############
-
-    return global_vertices, global_triangles
+    n = sdf.shape[0]
+    edge2corner = np.array([
+        [0, 1], [1, 2], [2, 3], [3, 0],
+        [4, 5], [5, 6], [6, 7], [7, 4],
+        [0, 4], [1, 5], [2, 6], [3, 7]
+    ])
+    for i in range(1, n):
+        for j in range(1, n):
+            for k in range(1, n):
+                corners = np.array([
+                    [i - 1, j - 1, k - 1], [i, j - 1, k - 1], [i, j, k - 1], [i - 1, j, k - 1],
+                    [i - 1, j - 1, k], [i, j - 1, k], [i, j, k], [i - 1, j, k]
+                ])
+                corner_vals = sdf[corners[:, 0], corners[:, 1], corners[:, 2]]
+                index = compute_cube_index(corner_vals[::-1])
+                edge_ids = np.array(triangle_table[index])
+                edge_ids = edge_ids[edge_ids != -1]
+                edge_ids = edge_ids.reshape((-1, 3))
+                for (u, v, w) in edge_ids:
+                    cu = edge2corner[u]  # corner ids for a given edge 
+                    cv = edge2corner[v]
+                    cw = edge2corner[w]
+                    vu = vertex_interpolation(
+                        corners[cu[0]], corners[cu[1]], corner_vals[cu[0]], corner_vals[cu[1]])
+                    vv = vertex_interpolation(
+                        corners[cv[0]], corners[cv[1]], corner_vals[cv[0]], corner_vals[cv[1]])
+                    vw = vertex_interpolation(
+                        corners[cw[0]], corners[cw[1]], corner_vals[cw[0]], corner_vals[cw[1]])                    
+                    global_vertices.extend([vu, vv, vw])
+                    m = len(global_vertices)
+                    global_triangles.append([m - 3, m - 2, m - 1])
+    return np.array(global_vertices), np.array(global_triangles)
 
 
 def vertex_interpolation(p_1, p_2, v_1, v_2, isovalue=0.):
@@ -184,5 +206,6 @@ def vertex_interpolation(p_1, p_2, v_1, v_2, isovalue=0.):
     :param isovalue: The iso value, always 0 in our case
     :return: A single point
     """
-
-    return p_1 + (p_2 - p_1) / 2.
+    if v_1 == v_2:
+        return (p_1 + p_2) / 2
+    return (p_2 - p_1) * (isovalue - v_1) / (v_2 - v_1) + p_1

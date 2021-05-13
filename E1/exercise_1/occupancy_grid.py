@@ -12,7 +12,11 @@ def occupancy_grid(sdf_function, resolution):
     :return: An occupancy grid of specified resolution (i.e. an array of dim (resolution, resolution, resolution) with value 0 outside the shape and 1 inside.
     """
 
-    # ###############
-    # TODO: Implement
-    return -1
-    # ###############
+    space = np.linspace(-0.5, 0.5, resolution)
+    x, y, z = np.meshgrid(space, space, space)
+    occ_grid = sdf_function(x.flatten(), y.flatten(), z.flatten()).reshape(
+        (resolution, resolution, resolution))
+    occ_grid[occ_grid > 0] = 0
+    occ_grid[occ_grid != 0] = 1 
+    return occ_grid
+

@@ -14,11 +14,9 @@ def signed_distance_sphere(x, y, z, r, x_0, y_0, z_0):
     :param z_0: z coordinate of the center of the sphere
     :return: signed distance from the surface of the sphere
     """
-
-    # ###############
-    # TODO: Implement
-    return -1
-    # ###############
+    pts = np.vstack((x, y, z)).T  # n x 3 
+    center = np.array([x_0, y_0, z_0])
+    return np.linalg.norm(pts - center, axis=1) - r
 
 
 def signed_distance_torus(x, y, z, R, r, x_0, y_0, z_0):
@@ -34,11 +32,8 @@ def signed_distance_torus(x, y, z, R, r, x_0, y_0, z_0):
     :param z_0: z coordinate of the center of the torus
     :return: signed distance from the surface of the torus
     """
-
-    # ###############
-    # TODO: Implement
-    return -1
-    # ###############
+    a = np.sqrt(x ** 2 + z ** 2) - R
+    return np.sqrt(a ** 2 + y ** 2) - r
 
 
 def signed_distance_atom(x, y, z):
@@ -59,5 +54,9 @@ def signed_distance_atom(x, y, z):
 
     # ###############
     # TODO: Implement
-    return -1
+    proton_dist = signed_distance_sphere(x, y, z, proton_radius, *proton_center)
+    electron_dist = signed_distance_sphere(x, y, z, electron_radius, *electron_center)
+    orbit_dist = signed_distance_torus(x, y, z, orbit_radius, orbit_thickness, *proton_center)
+    dist = np.stack((proton_dist, electron_dist, orbit_dist))
+    return np.min(dist, axis=0)
     # ###############

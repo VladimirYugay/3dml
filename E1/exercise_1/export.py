@@ -9,13 +9,11 @@ def export_mesh_to_obj(path, vertices, faces):
     :param faces: Mx3 faces
     :return: None
     """
-
-    # write vertices starting with "v "
-    # write faces starting with "f "
-
-    # ###############
-    # TODO: Implement
-    # ###############
+    with open(path, 'w') as file:
+        for v in vertices:
+            print("v {} {} {}".format(str(v[0]), str(v[1]), str(v[2])), file=file)
+        for f in faces:
+            print("f {} {} {}".format(str(f[0] + 1), str(f[1] + 1), str(f[2] + 1)), file=file)
 
 
 def export_pointcloud_to_obj(path, pointcloud):
@@ -25,7 +23,7 @@ def export_pointcloud_to_obj(path, pointcloud):
     :param pointcloud: Nx3 points
     :return: None
     """
-
-    # ###############
-    # TODO: Implement
-    # ###############
+    with open(path, 'w') as file:
+        for v in pointcloud:
+            print("v {} {} {}".format(str(v[0]), str(v[1]), str(v[2])), file=file)
+    
