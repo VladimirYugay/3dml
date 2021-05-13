@@ -52,11 +52,8 @@ def signed_distance_atom(x, y, z):
     electron_center = (orbit_radius, 0, 0)
     electron_radius = 0.05
 
-    # ###############
-    # TODO: Implement
     proton_dist = signed_distance_sphere(x, y, z, proton_radius, *proton_center)
     electron_dist = signed_distance_sphere(x, y, z, electron_radius, *electron_center)
     orbit_dist = signed_distance_torus(x, y, z, orbit_radius, orbit_thickness, *proton_center)
     dist = np.stack((proton_dist, electron_dist, orbit_dist))
     return np.min(dist, axis=0)
-    # ###############
