@@ -1,0 +1,14 @@
+name: 3dml 
+channels:
+  - conda-forge
+  - defaults
+  - pytorch
+dependencies:
+  - python=3.7
+  - K3D = 2.9.4
+  - matplotlib = 3.4.1
+  - trimesh = 3.9.14
+  - pytorch = 1.8.1
+  - pytorch-lightning = 1.2.8
+  - notebook 
+  - nb_conda

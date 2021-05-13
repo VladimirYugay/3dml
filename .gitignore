@@ -1,0 +1,4 @@
+*.obj
+*.ply
+*.ipynb_checkpoints
+*/__pycache__/
