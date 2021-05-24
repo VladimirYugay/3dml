@@ -15,7 +15,7 @@ E1 contains following implementations:
     * Rigid Shape Alignment 
     
  
-Ee contains following implementations:
+E2 contains following implementations:
 
 
     * Training and implementation of classification 3DCNN on voxel grids 
