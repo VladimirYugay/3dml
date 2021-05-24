@@ -3,4 +3,8 @@
 *.ipynb_checkpoints
 */__pycache__/
 *.pyc
+E2/e2/runs
+E2/e2/data/shapenetcore_partanno_segmentation_benchmark_v0
+E2/e2/data/ShapeNetPointClouds
+E2/e2/data/ShapeNetVox32
 
