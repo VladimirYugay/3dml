@@ -13,3 +13,11 @@ E1 contains following implementations:
     * Triangle meshes as Wavefront OBJ
     * Triangle meshes to Point Clouds conversion 
     * Rigid Shape Alignment 
+    
+ 
+E2 contains following implementations:
+
+
+    * Training and implementation of classification 3DCNN on voxel grids 
+    * Training and implementation of classification PointNet on point clouds
+    * Training and implementation of segmentation PointNet on point clouds
